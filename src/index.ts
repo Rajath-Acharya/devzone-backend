@@ -1,32 +1,54 @@
-import { buildSchema } from 'graphql'
 import express from 'express'
-import { graphqlHTTP } from 'express-graphql'
+import { ApolloServer } from '@apollo/server'
+import { expressMiddleware } from '@apollo/server/express4'
+import cors from 'cors'
 
-const PORT = 4000
+const books = [
+  {
+    title: 'The Awakening',
+    author: 'Kate Chopin',
+  },
+  {
+    title: 'City of Glass',
+    author: 'Paul Auster',
+  },
+]
 
-const schema = buildSchema(`
-  type Query {
-    hello: String
-  }
-`)
-
-const app = express()
-
-const root = {
-  hello: () => {
-    return 'Hello world!'
+const resolvers = {
+  Query: {
+    books: () => books,
   },
 }
 
-app.use(
-  '/graphql',
-  graphqlHTTP({
-    schema: schema,
-    rootValue: root,
-    graphiql: true,
-  }),
-)
+const typeDefs = `
+  type Book {
+    title: String!
+    author: String!
+  }
+  type Query {
+    books: [Book]
+  }
+`
 
-app.listen(PORT, () => {
-  console.log(`Running a GraphQL API server at http://localhost:${PORT}/graphql`)
-})
+async function startServer() {
+  const app = express()
+
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+  })
+
+  await server.start()
+
+  app.use(cors())
+
+  app.use(express.json())
+
+  app.use('/graphql', expressMiddleware(server))
+
+  app.listen(8000, () => {
+    console.log(`Server started at PORT 8000`)
+  })
+}
+
+startServer()
