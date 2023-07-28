@@ -9,7 +9,7 @@
       "esnext.asynciterable"
     ],
     "moduleResolution": "node",
-    "baseUrl": "./src",
+    "baseUrl": ".",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,

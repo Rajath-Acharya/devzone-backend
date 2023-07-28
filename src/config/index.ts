@@ -10,6 +10,8 @@ export const config = {
     dbHost: process.env.DB_HOST,
     dbDriver: process.env.DB_DRIVER as Dialect,
     dbPassword: process.env.DB_PASSWORD,
-    PORT: 4000,
+  },
+  app: {
+    PORT: process.env.PORT || 4000,
   },
 }
