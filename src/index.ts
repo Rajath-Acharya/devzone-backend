@@ -2,6 +2,8 @@ import express from 'express'
 import { ApolloServer } from '@apollo/server'
 import { expressMiddleware } from '@apollo/server/express4'
 import cors from 'cors'
+import sequelizeConnection from './db/connection'
+import logger from './utils/logger'
 
 const books = [
   {
@@ -46,9 +48,17 @@ async function startServer() {
 
   app.use('/graphql', expressMiddleware(server))
 
-  app.listen(8000, () => {
-    console.log(`Server started at PORT 8000`)
-  })
+  await (async function connectDatabase() {
+    try {
+      await sequelizeConnection.sync()
+      logger.info('DB connected')
+      app.listen(8000, () => {
+        logger.info(`Server started at PORT 8000`)
+      })
+    } catch (error) {
+      logger.error('Failed to connect database')
+    }
+  })()
 }
 
 startServer()
