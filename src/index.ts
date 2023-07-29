@@ -5,6 +5,7 @@ import cors from 'cors'
 import logger from './utils/logger'
 import { connectDB, sequelize } from './db'
 import { config } from './config'
+import 'reflect-metadata'
 
 const books = [
   {
@@ -52,7 +53,7 @@ async function init() {
 
   await server.start()
 
-  app.use('/v1/graphql', expressMiddleware(server))
+  app.use('/graphql', expressMiddleware(server))
 
   async function connectDatabase() {
     try {
@@ -63,6 +64,7 @@ async function init() {
       })
     } catch (error) {
       logger.error('Failed to connect database')
+      process.exit(1)
     }
   }
 

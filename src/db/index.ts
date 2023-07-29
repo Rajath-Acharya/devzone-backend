@@ -1,12 +1,12 @@
-import { Sequelize, DataTypes } from 'sequelize'
+import { Sequelize, DataTypes, Model } from 'sequelize'
 import { config } from '../config'
 import logger from '../utils/logger'
 
-const { dbName, dbUser, dbPassword, dbHost, dbDriver } = config.db
+const { name, user, password, host, driver } = config.db
 
-const sequelize = new Sequelize(dbName, dbUser, dbPassword, {
-  host: dbHost,
-  dialect: dbDriver,
+const sequelize = new Sequelize(name, user, password, {
+  host,
+  dialect: driver,
   pool: {
     max: 5,
     min: 0,
@@ -24,4 +24,4 @@ async function connectDB() {
   }
 }
 
-export { connectDB, sequelize, Sequelize, DataTypes }
+export { connectDB, sequelize, Sequelize, DataTypes, Model }
