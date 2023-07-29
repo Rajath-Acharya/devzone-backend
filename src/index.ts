@@ -3,9 +3,9 @@ import { ApolloServer } from '@apollo/server'
 import { expressMiddleware } from '@apollo/server/express4'
 import cors from 'cors'
 import logger from './utils/logger'
-import { connectDB, sequelize } from './db'
 import { config } from './config'
 import 'reflect-metadata'
+import { AppDataSource } from './data-source'
 
 const books = [
   {
@@ -57,10 +57,10 @@ async function init() {
 
   async function connectDatabase() {
     try {
-      await connectDB()
-      await sequelize.sync({ force: false })
-      app.listen(config.app.PORT, () => {
-        logger.info(`✅ Server started at PORT ${config.app.PORT}`)
+      await AppDataSource.initialize()
+      logger.info('✅ Database connected')
+      app.listen(config.app.port, () => {
+        logger.info(`✅ Server started at PORT ${config.app.port}`)
       })
     } catch (error) {
       logger.error('Failed to connect database')

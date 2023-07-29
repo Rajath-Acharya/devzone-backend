@@ -1,5 +1,4 @@
 import dotenv from 'dotenv'
-import { Dialect } from 'sequelize'
 
 dotenv.config()
 
@@ -8,10 +7,11 @@ export const config = {
     name: process.env.DB_NAME as string,
     user: process.env.DB_USER as string,
     host: process.env.DB_HOST,
-    driver: process.env.DB_DRIVER as Dialect,
+    driver: process.env.DB_DRIVER,
     password: process.env.DB_PASSWORD,
+    port: Number(process.env.DB_PORT) || 8040,
   },
   app: {
-    PORT: process.env.PORT || 4000,
+    port: Number(process.env.APP_PORT) || 4000,
   },
 }
